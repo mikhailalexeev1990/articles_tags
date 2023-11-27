@@ -1,0 +1,61 @@
+version: '3.9'
+
+services:
+  caddy:
+    image: caddy:2.4.5-alpine
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - 8001:80
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/php/Dockerfile
+      target: app-local
+    environment:
+      # postgres
+      POSTGRES_VERSION: ${POSTGRES_VERSION:-15}
+      POSTGRES_HOST: ${POSTGRES_HOST:-database}
+      POSTGRES_DB: ${POSTGRES_DB:-articles_tags}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      APP_ENV: ${APP_ENV:-dev}
+      APP_SECRET: "app-secret-articles_tags"
+      # jwt
+      JWT_SECRET_KEY: "%kernel.project_dir%/config/jwt/private.pem"
+      JWT_PUBLIC_KEY: "%kernel.project_dir%/config/jwt/public.pem"
+      JWT_PASSPHRASE: "jwt-passphrase-articles_tags"
+      # xdebug
+      XDEBUG_IDEKEY: articles_tags
+#    command: [ "composer install && php-fpm" ]
+    command: [ "php-fpm" ]
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./:/var/www/app
+      - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+
+  database:
+    image: postgres:${POSTGRES_VERSION:-15}-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-articles_tags}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    ports:
+      - 5501:5432
+    volumes:
+      - database-data:/var/lib/postgresql/data:rw
+
+volumes:
+  database-data:

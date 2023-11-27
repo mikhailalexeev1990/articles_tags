@@ -1,0 +1,18 @@
+:80 {
+        # common settings
+        header -Server
+        header -X-Powered-By
+        encode zstd gzip
+
+        # Symfony api and external
+        @symfony_routes {
+                path /healthcheck /api/* /web/* /_wdt/* /_profiler/*
+        }
+
+        route @symfony_routes {
+                root * /var/www/app/public
+                rewrite * /index.php?{query}
+
+                php_fastcgi app:9000
+        }
+}
