@@ -15,15 +15,28 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[OA\Schema(schema: 'Article')]
 #[OA\Schema(
+    schema: 'ArticleWithTags',
+    allOf: [
+        new OA\Schema(ref: '#/components/schemas/Article'),
+        new OA\Schema(properties: [
+            new OA\Property(
+                property: 'articleTags',
+                type: 'array',
+                items: new OA\Items(ref: '#/components/schemas/Tag'),
+            ),
+        ])
+    ],
+)]
+#[OA\Schema(
     schema: 'ArticlePayload',
     properties: [
         new OA\Property(property: 'title', ref: '#/components/schemas/Article/properties/title'),
         new OA\Property(
-            property: 'articleTags', type: 'array', items: new OA\Items(
-            properties: [
+            property: 'articleTags',
+            type: 'array',
+            items: new OA\Items(properties: [
                 new OA\Property(property: 'tag', ref: '#/components/schemas/Tag/properties/id'),
-            ],
-        )
+            ])
         ),
     ],
 )]
@@ -32,6 +45,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Article
 {
     public const GROUP_VIEW = 'article.view';
+    public const GROUP_ARTICLE_TAGS = 'articleTags.view';
 
     #[OA\Property(type: 'integer', example: 1)]
     #[Groups([self::GROUP_VIEW])]
@@ -51,6 +65,7 @@ class Article
         cascade: ['persist', 'remove'],
         orphanRemoval: true)
     ]
+    #[Groups([self::GROUP_ARTICLE_TAGS])]
     private Collection $articleTags;
 
     public function __construct()

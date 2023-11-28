@@ -8,6 +8,7 @@ use App\Repository\ArticleTagRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ArticleTagRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -18,6 +19,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 )]
 class ArticleTag
 {
+    public const GROUP_VIEW = 'articleTag.view';
+
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Article::class, inversedBy: 'articleTags')]
     private Article $article;
@@ -25,6 +28,7 @@ class ArticleTag
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Tag::class)]
     #[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id')]
+    #[Groups([self::GROUP_VIEW])]
     private Tag $tag;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
