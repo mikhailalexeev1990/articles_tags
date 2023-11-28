@@ -18,6 +18,13 @@ use Symfony\Component\Routing\Annotation\Route;
     url: 'http://localhost:8001',
     description: 'Local server',
 )]
+#[OA\Parameter(
+    parameter: 'id',
+    name: 'id',
+    in: 'path',
+    required: true,
+    schema: new OA\Schema(type: 'integer', example: 1),
+)]
 #[OA\Response(response: 'response_200', description: 'OK')]
 #[OA\Response(response: 'response_201', description: 'Created')]
 #[OA\Response(response: 'response_204', description: 'No Content')]

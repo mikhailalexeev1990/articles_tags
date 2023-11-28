@@ -7,9 +7,14 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/doctrine-bundle": "^2.11",
+        "doctrine/doctrine-migrations-bundle": "^3.3",
+        "doctrine/orm": "^2.17",
+        "symfony/asset": "6.3.*",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2",
+        "symfony/form": "6.3.*",
         "symfony/framework-bundle": "6.3.*",
         "symfony/runtime": "6.3.*",
         "symfony/serializer": "6.3.*",
@@ -23,6 +28,10 @@
             "php-http/discovery": true,
             "symfony/flex": true,
             "symfony/runtime": true
+        },
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
         },
         "sort-packages": true
     },
@@ -65,5 +74,9 @@
             "allow-contrib": false,
             "require": "6.3.*"
         }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.51",
+        "symfony/web-profiler-bundle": "^6.3"
     }
 }

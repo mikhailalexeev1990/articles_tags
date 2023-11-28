@@ -24,10 +24,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-user}
       APP_ENV: ${APP_ENV:-dev}
       APP_SECRET: "app-secret-articles_tags"
-      # jwt
-      JWT_SECRET_KEY: "%kernel.project_dir%/config/jwt/private.pem"
-      JWT_PUBLIC_KEY: "%kernel.project_dir%/config/jwt/public.pem"
-      JWT_PASSPHRASE: "jwt-passphrase-articles_tags"
       # xdebug
       XDEBUG_IDEKEY: articles_tags
 #    command: [ "composer install && php-fpm" ]
