@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\API;
 
+use App\Controller\API\Dto\ArticleRequestDto;
 use App\Entity\Article;
-use App\Entity\ArticleTag;
-use App\Entity\Tag;
 use App\Exception\InvalidFormDataException;
 use App\Form\Type\ArticleType;
 use App\Repository\ArticleRepository;
-use App\Validator\ArticleListQueryDTO;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use OpenApi\Attributes as OA;
 
 #[Route('/api/v1/articles', stateless: true)]
 class ArticleController extends AbstractController
@@ -60,26 +58,13 @@ class ArticleController extends AbstractController
         ]
     )]
     #[Route(name: 'articles_list', methods: [Request::METHOD_GET])]
-    public function list(#[MapQueryString] ArticleListQueryDTO $articleListQueryDTO): JsonResponse
+    public function list(#[MapQueryString] ArticleRequestDto $articleListQueryDTO): JsonResponse
     {
-        $articles = $this->repository->createQueryBuilder('a')
-            ->leftJoin('a.articleTags', 'at')
-            ->leftJoin('at.tag', 't')
-            ->where('t.id IN (:tags)')
-            ->setParameter('tags', $articleListQueryDTO->tags)
-            ->getQuery()
-            ->getResult();
+        $articles = $this->repository->findArticlesByTagIds($articleListQueryDTO->tags);
 
         return $this->json(
             data: $articles,
-            context: [
-                AbstractNormalizer::GROUPS => [
-                    Article::GROUP_VIEW,
-                    Article::GROUP_ARTICLE_TAGS,
-                    ArticleTag::GROUP_VIEW,
-                    Tag::GROUP_VIEW
-                ]
-            ]
+            context: [AbstractNormalizer::GROUPS => Article::GROUP_ARTICLE_WITH_TAGS]
         );
     }
 
@@ -103,14 +88,7 @@ class ArticleController extends AbstractController
     {
         return $this->json(
             data: $article,
-            context: [
-                AbstractNormalizer::GROUPS => [
-                    Article::GROUP_VIEW,
-                    Article::GROUP_ARTICLE_TAGS,
-                    ArticleTag::GROUP_VIEW,
-                    Tag::GROUP_VIEW
-                ]
-            ]
+            context: [AbstractNormalizer::GROUPS => Article::GROUP_ARTICLE_WITH_TAGS]
         );
     }
 

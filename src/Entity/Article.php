@@ -46,6 +46,12 @@ class Article
 {
     public const GROUP_VIEW = 'article.view';
     public const GROUP_ARTICLE_TAGS = 'articleTags.view';
+    public const GROUP_ARTICLE_WITH_TAGS = [
+        Article::GROUP_VIEW,
+        Article::GROUP_ARTICLE_TAGS,
+        ArticleTag::GROUP_VIEW,
+        Tag::GROUP_VIEW,
+    ];
 
     #[OA\Property(type: 'integer', example: 1)]
     #[Groups([self::GROUP_VIEW])]

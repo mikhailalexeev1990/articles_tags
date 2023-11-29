@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Validator;
+namespace App\Controller\API\Dto;
 
 use App\Entity\Tag;
+use App\Validator\EntityExistsConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
-readonly class ArticleListQueryDTO
+readonly class ArticleRequestDto
 {
     public function __construct(
         #[Assert\All([
             new Assert\Positive(),
-            new EntityExists(class: Tag::class),
+            new EntityExistsConstraint(class: Tag::class),
         ])]
         public array $tags = [],
     ) {

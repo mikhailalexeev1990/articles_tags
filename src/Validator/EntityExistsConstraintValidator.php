@@ -9,7 +9,7 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-final class EntityExistsValidator extends ConstraintValidator
+final class EntityExistsConstraintValidator extends ConstraintValidator
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
@@ -17,7 +17,7 @@ final class EntityExistsValidator extends ConstraintValidator
     }
 
     /**
-     * @param EntityExists $constraint
+     * @param EntityExistsConstraint $constraint
      */
     public function validate(mixed $value, Constraint $constraint): void
     {
@@ -25,8 +25,8 @@ final class EntityExistsValidator extends ConstraintValidator
             return;
         }
 
-        if (!$constraint instanceof EntityExists) {
-            throw new UnexpectedTypeException($constraint, EntityExists::class);
+        if (!$constraint instanceof EntityExistsConstraint) {
+            throw new UnexpectedTypeException($constraint, EntityExistsConstraint::class);
         }
 
         $entity = $this->entityManager->find($constraint->class, $value);

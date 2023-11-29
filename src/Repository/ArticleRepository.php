@@ -20,4 +20,22 @@ class ArticleRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Article::class);
     }
+
+    /**
+     * @param int[] $tagIds
+     * @return Article[]
+     */
+    public function findArticlesByTagIds(array $tagIds): array
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.articleTags', 'at')
+            ->leftJoin('at.tag', 't')
+            ->where('t.id IN (:tagIds)')
+            ->setParameter('tagIds', $tagIds)
+            ->groupBy('a.id')
+            ->having('COUNT(DISTINCT t.id) = :tagCount')
+            ->setParameter('tagCount', count($tagIds))
+            ->getQuery()
+            ->getResult();
+    }
 }

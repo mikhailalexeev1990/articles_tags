@@ -7,7 +7,7 @@ namespace App\Validator;
 use Symfony\Component\Validator\Constraint;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-final class EntityExists extends Constraint
+final class EntityExistsConstraint extends Constraint
 {
     public function __construct(
         /** @var class-string */

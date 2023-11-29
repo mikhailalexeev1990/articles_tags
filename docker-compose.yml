@@ -26,8 +26,7 @@ services:
       APP_SECRET: "app-secret-articles_tags"
       # xdebug
       XDEBUG_IDEKEY: articles_tags
-#    command: [ "composer install && php-fpm" ]
-    command: [ "php-fpm" ]
+    command: [ "composer init-local && php-fpm" ]
     depends_on:
       database:
         condition: service_healthy
