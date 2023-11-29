@@ -12,11 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ArticleTagRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[UniqueEntity(
-    fields: ['article', 'tag'],
-    errorPath: 'title',
-    ignoreNull: true
-)]
+#[UniqueEntity(fields: ['article', 'tag'])]
 class ArticleTag
 {
     public const GROUP_VIEW = 'articleTag.view';
