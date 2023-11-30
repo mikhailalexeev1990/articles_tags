@@ -18,10 +18,13 @@ class ArticleTag
     public const GROUP_VIEW = 'articleTag.view';
 
     #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $id = null;
+
     #[ORM\ManyToOne(targetEntity: Article::class, inversedBy: 'articleTags')]
     private Article $article;
 
-    #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Tag::class)]
     #[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id')]
     #[Groups([self::GROUP_VIEW])]
@@ -29,6 +32,11 @@ class ArticleTag
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getArticle(): Article
     {

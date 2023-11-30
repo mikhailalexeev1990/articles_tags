@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\API;
+namespace App\Controller\Rest;
 
 use App\Entity\Tag;
 use App\Exception\InvalidFormDataException;

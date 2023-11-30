@@ -69,8 +69,8 @@ class Article
         mappedBy: 'article',
         targetEntity: ArticleTag::class,
         cascade: ['persist', 'remove'],
-        orphanRemoval: true)
-    ]
+        orphanRemoval: true
+    )]
     #[Groups([self::GROUP_ARTICLE_TAGS])]
     private Collection $articleTags;
 

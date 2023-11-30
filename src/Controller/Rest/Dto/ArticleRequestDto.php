@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\API\Dto;
+namespace App\Controller\Rest\Dto;
 
 use App\Entity\Tag;
 use App\Validator\EntityExistsConstraint;

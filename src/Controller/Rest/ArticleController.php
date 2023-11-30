@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\API;
+namespace App\Controller\Rest;
 
-use App\Controller\API\Dto\ArticleRequestDto;
+use App\Controller\Rest\Dto\ArticleRequestDto;
 use App\Entity\Article;
 use App\Exception\InvalidFormDataException;
 use App\Form\Type\ArticleType;
